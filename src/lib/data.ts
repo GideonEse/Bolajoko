@@ -1,10 +1,10 @@
 import type { User, Receipt } from './types';
 
 export const mockUsers: User[] = [
-  { id: '1', name: 'Alice Johnson', email: 'alice@example.com', role: 'student', universityId: 'S12345' },
-  { id: '2', name: 'Bob Williams', email: 'bob@example.com', role: 'student', universityId: 'S67890' },
-  { id: '3', name: 'Charlie Brown', email: 'charlie@example.com', role: 'staff', universityId: 'T001' },
-  { id: '4', name: 'Diana Prince', email: 'diana@example.com', role: 'admin', universityId: 'A001' },
+  { id: '1', name: 'Alice Johnson', email: 'alice@example.com', role: 'student', matricNumber: 'S12345' },
+  { id: '2', name: 'Bob Williams', email: 'bob@example.com', role: 'student', matricNumber: 'S67890' },
+  { id: '3', name: 'Charlie Brown', email: 'charlie@example.com', role: 'staff', matricNumber: 'T001' },
+  { id: '4', name: 'Diana Prince', email: 'diana@example.com', role: 'admin', matricNumber: 'A001' },
 ];
 
 export const mockReceipts: Receipt[] = [

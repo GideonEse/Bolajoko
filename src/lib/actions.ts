@@ -16,7 +16,7 @@ export async function register(formData: FormData) {
     console.log('New user registered:', {
         name: formData.get('name'),
         email: formData.get('email'),
-        universityId: formData.get('universityId'),
+        matricNumber: formData.get('matricNumber'),
         role: role,
     });
     redirect(`/dashboard?role=${role || 'student'}`);

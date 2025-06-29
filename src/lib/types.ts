@@ -5,7 +5,7 @@ export interface User {
   name: string;
   email: string;
   role: Role;
-  universityId: string;
+  matricNumber: string;
 }
 
 export type ReceiptStatus = 'Pending' | 'Approved' | 'Rejected';

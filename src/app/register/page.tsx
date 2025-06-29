@@ -49,8 +49,8 @@ export default function RegisterPage() {
               />
             </div>
              <div className="grid gap-2">
-              <Label htmlFor="universityId">University ID</Label>
-              <Input id="universityId" name="universityId" placeholder="S12345" required />
+              <Label htmlFor="matricNumber">Matric Number</Label>
+              <Input id="matricNumber" name="matricNumber" placeholder="U21/CS/001" required />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>
