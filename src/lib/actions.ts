@@ -4,32 +4,61 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { verifyReceipt, type VerifyReceiptOutput } from '@/ai/flows/verify-receipt';
 import { revalidatePath } from 'next/cache';
-import { addReceipt, updateReceipt, mockUsers, getReceipts } from './data';
+import { 
+    addReceipt, 
+    updateReceipt, 
+    getReceipts,
+    addUser,
+    findUserByEmail,
+    findUserById
+} from './data';
+import type { Role } from './types';
 
 export async function login(formData: FormData) {
   const role = formData.get('role') as string;
   const email = formData.get('email') as string;
   
-  // Find user by email and role to simulate authentication
-  const user = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.role === role);
+  // Find user by email
+  const user = await findUserByEmail(email);
 
-  // Default to student '1' (Alice) if not found, for demonstration purposes
-  const userId = user ? user.id : '1';
-  
-  redirect(`/dashboard?role=${role || 'student'}&userId=${userId}`);
+  // In a real app, you would also verify the password here.
+  // For this prototype, we'll just check if the user exists and the role matches.
+  if (user && user.role === role) {
+    redirect(`/dashboard?role=${user.role}&userId=${user.id}`);
+  } else {
+    // In a real app, you'd show an error message.
+    // For now, we just redirect back to the login page.
+    redirect('/');
+  }
 }
 
 export async function register(formData: FormData) {
-    // In a real app, you would save the user to the database here.
-    const role = formData.get('role') as string;
-    console.log('New user registered:', {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        matricNumber: formData.get('matricNumber'),
-        role: role,
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const matricNumber = formData.get('matricNumber') as string;
+    const role = formData.get('role') as Role;
+    const password = formData.get('password') as string;
+
+    if(!name || !email || !matricNumber || !role || !password) {
+        redirect('/register?error=Please fill all fields');
+        return;
+    }
+
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+        redirect('/register?error=User already exists');
+        return;
+    }
+
+    const newUser = await addUser({
+        name,
+        email,
+        matricNumber,
+        role,
     });
-    // For now, just log them in with their chosen role
-    redirect(`/dashboard?role=${role || 'student'}`);
+    
+    // Automatically log in the user after registration
+    redirect(`/dashboard?role=${newUser.role}&userId=${newUser.id}`);
 }
 
 const receiptSchema = z.object({
@@ -75,7 +104,7 @@ export async function handleReceiptVerification(
     };
   }
   
-  const student = mockUsers.find(u => u.id === validatedFields.data.studentId);
+  const student = await findUserById(validatedFields.data.studentId);
   if (!student) {
      return {
       status: 'error',

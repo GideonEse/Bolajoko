@@ -46,7 +46,7 @@ export default function LoginPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" name="password" required defaultValue="password123" />
+              <Input id="password" type="password" name="password" required />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>
