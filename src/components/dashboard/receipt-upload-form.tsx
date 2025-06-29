@@ -5,7 +5,6 @@ import { handleReceiptVerification, type VerificationState } from '@/lib/actions
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { UploadCloud, Loader2 } from 'lucide-react';
 import { useActionState, useEffect, useRef } from 'react';
@@ -69,18 +68,6 @@ export function ReceiptUploadForm() {
             <Label htmlFor="receiptId">Receipt ID</Label>
             <Input id="receiptId" name="receiptId" placeholder="e.g., INV-12345" required />
             {state.errors?.receiptId && <p className="text-sm text-destructive">{state.errors.receiptId[0]}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="stamp">Stamp Description</Label>
-            <Textarea id="stamp" name="stamp" placeholder="Describe the stamp on the receipt..." required />
-             {state.errors?.stamp && <p className="text-sm text-destructive">{state.errors.stamp[0]}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="signature">Signature Description</Label>
-            <Textarea id="signature" name="signature" placeholder="Describe the signature on the receipt..." required />
-            {state.errors?.signature && <p className="text-sm text-destructive">{state.errors.signature[0]}</p>}
           </div>
 
           <div className="space-y-2">

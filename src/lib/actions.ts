@@ -24,8 +24,6 @@ export async function register(formData: FormData) {
 
 const receiptSchema = z.object({
   receiptId: z.string().min(1, 'Receipt ID is required.'),
-  stamp: z.string().min(1, 'Stamp description is required.'),
-  signature: z.string().min(1, 'Signature description is required.'),
   date: z.string().min(1, 'Date is required.'),
   receiptImage: z
     .instanceof(File)
@@ -40,8 +38,6 @@ export type VerificationState = {
   data?: VerifyReceiptOutput;
   errors?: {
     receiptId?: string[];
-    stamp?: string[];
-    signature?: string[];
     date?: string[];
     receiptImage?: string[];
     _server?: string[];
@@ -54,8 +50,6 @@ export async function handleReceiptVerification(
 ): Promise<VerificationState> {
   const validatedFields = receiptSchema.safeParse({
     receiptId: formData.get('receiptId'),
-    stamp: formData.get('stamp'),
-    signature: formData.get('signature'),
     date: formData.get('date'),
     receiptImage: formData.get('receiptImage'),
   });
