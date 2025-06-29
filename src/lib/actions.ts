@@ -24,7 +24,7 @@ export async function login(formData: FormData) {
   if (user && user.role === role && user.password === password) {
     redirect(`/dashboard?role=${user.role}&userId=${user.id}`);
   } else {
-    redirect('/');
+    redirect('/?error=Invalid credentials. Please try again.');
   }
 }
 

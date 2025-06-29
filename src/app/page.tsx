@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -24,6 +25,8 @@ import { Logo } from '@/components/logo';
 
 export default function LoginPage() {
   const [role, setRole] = useState('student');
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
 
   const handleRoleChange = (value: string) => {
     setRole(value);
@@ -75,6 +78,11 @@ export default function LoginPage() {
               Login
             </Button>
           </form>
+          {error && (
+            <div className="mt-4 text-center text-sm text-destructive">
+              {error}
+            </div>
+          )}
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{' '}
             <Link href="/register" className="underline">

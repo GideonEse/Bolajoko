@@ -9,6 +9,22 @@ export let mockUsers: User[] = [
     role: 'admin',
     matricNumber: 'admin',
     password: 'admin',
+  },
+  {
+    id: 'U1',
+    name: 'Alice Student',
+    email: 'alice@example.com',
+    role: 'student',
+    matricNumber: 'U21CS001',
+    password: 'password',
+  },
+  {
+    id: 'U2',
+    name: 'Bob Staff',
+    email: 'bob@example.com',
+    role: 'staff',
+    matricNumber: 'S-ENG055',
+    password: 'password',
   }
 ];
 
