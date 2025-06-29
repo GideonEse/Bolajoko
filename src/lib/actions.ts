@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { verifyReceipt, type VerifyReceiptOutput } from '@/ai/flows/verify-receipt';
 import { revalidatePath } from 'next/cache';
-import { addReceipt, updateReceipt, mockUsers } from './data';
+import { addReceipt, updateReceipt, mockUsers, getReceipts } from './data';
 
 export async function login(formData: FormData) {
   const role = formData.get('role') as string;
@@ -102,7 +102,7 @@ export async function handleReceiptVerification(
         studentName: student.name,
         receiptId: otherFields.receiptId,
         date: otherFields.date,
-      }, receiptImage);
+      }, dataURI);
 
       revalidatePath('/dashboard');
 
@@ -152,4 +152,23 @@ export async function rejectReceipt(id: string, reason: string) {
     console.error('Failed to reject receipt:', error);
     return { success: false, message: 'Failed to reject receipt.' };
   }
+}
+
+export async function getApprovedListAsCsv(): Promise<string> {
+  const receipts = await getReceipts();
+  const approvedReceipts = receipts.filter(r => r.status === 'Approved');
+
+  if (approvedReceipts.length === 0) {
+    return '';
+  }
+
+  const headers = ['Student Name', 'Receipt ID', 'Date Submitted'];
+  const rows = approvedReceipts.map(r => [r.studentName, r.receiptId, r.date]);
+  
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(row => `"${row.join('","')}"`)
+  ].join('\n');
+  
+  return csvContent;
 }

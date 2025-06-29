@@ -29,8 +29,7 @@ export default function LoginPage() {
           </div>
           <CardTitle className="text-2xl font-headline">Login</CardTitle>
           <CardDescription>
-            Enter your credentials to access your dashboard. <br/>
-            Use <code className="bg-muted px-1 rounded-sm">alice@example.com</code> or <code className="bg-muted px-1 rounded-sm">bob@example.com</code> for the student role.
+            Enter your email below to login to your account.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -61,7 +60,6 @@ export default function LoginPage() {
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
-               <p className="text-xs text-muted-foreground">Select a role to view the corresponding dashboard.</p>
             </div>
             <Button type="submit" className="w-full">
               Login

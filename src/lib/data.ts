@@ -63,13 +63,12 @@ export async function getReceiptsByStudentId(studentId: string): Promise<Receipt
   return Promise.resolve(mockReceipts.filter(r => r.studentId === studentId));
 }
 
-export async function addReceipt(receiptData: Omit<Receipt, 'id' | 'status' | 'reason' | 'imageUrl'>, receiptImage: File): Promise<Receipt> {
+export async function addReceipt(receiptData: Omit<Receipt, 'id' | 'status' | 'reason' | 'imageUrl'>, imageUrl: string): Promise<Receipt> {
   const newReceipt: Receipt = {
     ...receiptData,
     id: `R${Date.now()}`, // More unique ID
     status: 'Pending',
-    // In a real app, you'd upload this to cloud storage and get a URL
-    imageUrl: 'https://placehold.co/400x600.png', 
+    imageUrl, // Use the provided data URI
     reason: '',
   };
   mockReceipts.unshift(newReceipt); // Add to the start of the list
