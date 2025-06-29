@@ -16,24 +16,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { login } from '@/lib/actions';
+import { register } from '@/lib/actions';
 import { Logo } from '@/components/logo';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="mx-auto max-w-sm w-full shadow-2xl">
         <CardHeader className="text-center">
-          <div className="mb-4">
+           <div className="mb-4">
             <Logo />
           </div>
-          <CardTitle className="text-2xl font-headline">Login</CardTitle>
+          <CardTitle className="text-2xl font-headline">Sign Up</CardTitle>
           <CardDescription>
-            Enter your credentials to access your dashboard
+            Create an account to start managing receipts
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={login} className="grid gap-4">
+          <form action={register} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" placeholder="Your Name" required />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -44,13 +48,13 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" name="password" required />
+             <div className="grid gap-2">
+              <Label htmlFor="universityId">University ID</Label>
+              <Input id="universityId" name="universityId" placeholder="S12345" required />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>
-              <Select name="role" defaultValue="student">
+              <Select name="role" required defaultValue="student">
                 <SelectTrigger>
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
@@ -60,16 +64,19 @@ export default function LoginPage() {
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
-               <p className="text-xs text-muted-foreground">Select a role to view the corresponding dashboard.</p>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" name="password" required />
             </div>
             <Button type="submit" className="w-full">
-              Login
+              Create an account
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="underline">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/" className="underline">
+              Login
             </Link>
           </div>
         </CardContent>
