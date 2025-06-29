@@ -20,7 +20,6 @@ import {
   FileDown,
   LogOut,
   Settings,
-  LifeBuoy,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -73,7 +72,9 @@ export default function DashboardLayout({
         }
       });
     }
-  }, [userId]);
+  }, [userId, children]); // Rerun effect if children change to pick up new user name
+
+  const settingsHref = userId ? `/dashboard/settings?role=${role}&userId=${userId}` : '#';
 
   return (
     <SidebarProvider>
@@ -113,16 +114,10 @@ export default function DashboardLayout({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{user?.name ?? 'My Account'}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <Link href="#">
+              <Link href={settingsHref}>
                 <DropdownMenuItem>
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
-                </DropdownMenuItem>
-              </Link>
-              <Link href="#">
-                <DropdownMenuItem>
-                  <LifeBuoy className="mr-2 h-4 w-4" />
-                  <span>Support</span>
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />

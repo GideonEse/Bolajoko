@@ -10,7 +10,8 @@ import {
     getReceipts,
     addUser,
     findUserByMatricNumber,
-    findUserById
+    findUserById,
+    updateUser,
 } from './data';
 import type { Role, User } from './types';
 
@@ -199,4 +200,72 @@ export async function getApprovedListAsCsv(): Promise<string> {
 export async function getUserData(userId: string): Promise<User | null> {
   const user = await findUserById(userId);
   return user ?? null;
+}
+
+const userSettingsSchema = z.object({
+  userId: z.string().min(1, 'User ID is missing.'),
+  name: z.string().min(3, 'Name must be at least 3 characters.'),
+  password: z.string().min(6, 'Password must be at least 6 characters.').optional().or(z.literal('')),
+  confirmPassword: z.string().optional(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+export type UserSettingsState = {
+  status: 'success' | 'error' | 'idle';
+  message: string;
+  errors?: {
+    userId?: string[];
+    name?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+    _server?: string[];
+  };
+};
+
+export async function updateUserSettings(
+  prevState: UserSettingsState,
+  formData: FormData
+): Promise<UserSettingsState> {
+  const validatedFields = userSettingsSchema.safeParse({
+    userId: formData.get('userId'),
+    name: formData.get('name'),
+    password: formData.get('password'),
+    confirmPassword: formData.get('confirmPassword'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      status: 'error',
+      message: 'Please check your input.',
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { userId, name, password } = validatedFields.data;
+  
+  try {
+    const updateData: { name: string; password?: string } = { name };
+    if (password) {
+      updateData.password = password;
+    }
+    
+    await updateUser(userId, updateData);
+
+    revalidatePath('/dashboard/settings');
+    revalidatePath('/dashboard'); 
+
+    return {
+      status: 'success',
+      message: 'Your settings have been updated successfully.',
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return {
+      status: 'error',
+      message,
+      errors: { _server: [message] },
+    };
+  }
 }

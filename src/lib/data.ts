@@ -7,8 +7,7 @@ declare global {
   var mockReceipts: Receipt[] | undefined;
 }
 
-if (!global.mockUsers) {
-  global.mockUsers = [
+const defaultUsers: User[] = [
     {
       id: 'U0',
       name: 'Admin User',
@@ -23,18 +22,25 @@ if (!global.mockUsers) {
       matricNumber: 'U21CS001',
       password: 'password',
     },
-    {
+     {
       id: 'U2',
       name: 'Jane Smith',
       role: 'staff',
       matricNumber: 'S-ENG055',
       password: 'password',
     },
-  ];
-}
+];
 
-if (!global.mockReceipts) {
+if (process.env.NODE_ENV === 'production') {
+  global.mockUsers = defaultUsers;
+  global.mockReceipts = [];
+} else {
+  if (!global.mockUsers) {
+    global.mockUsers = defaultUsers;
+  }
+  if (!global.mockReceipts) {
     global.mockReceipts = [];
+  }
 }
 
 export let mockUsers: User[] = global.mockUsers;
@@ -58,6 +64,17 @@ export async function addUser(userData: Omit<User, 'id'>): Promise<User> {
   };
   mockUsers.push(newUser);
   return Promise.resolve(newUser);
+}
+
+export async function updateUser(userId: string, data: Partial<Pick<User, 'name' | 'password'>>): Promise<User | null> {
+    const userIndex = mockUsers.findIndex(u => u.id === userId);
+    if (userIndex > -1) {
+        const user = mockUsers[userIndex];
+        // Create a new object to ensure reactivity and avoid direct mutation
+        mockUsers[userIndex] = { ...user, ...data };
+        return Promise.resolve(mockUsers[userIndex]);
+    }
+    return Promise.resolve(null);
 }
 
 
