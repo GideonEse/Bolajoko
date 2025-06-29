@@ -125,10 +125,10 @@ export default function AdminDashboard({ receipts }: { receipts: Receipt[] }) {
                 <Image src={activeReceipt.imageUrl} alt={`Receipt ${activeReceipt.receiptId}`} layout="fill" objectFit="contain" data-ai-hint="receipt document"/>
                </div>
                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <p><span className="font-semibold">Student:</span> {activeReceipt.studentName}</p>
-                  <p><span className="font-semibold">Date:</span> {activeReceipt.date}</p>
-                  <p><span className="font-semibold">Status:</span> <Badge variant="outline" className={statusColors[activeReceipt.status]}>{activeReceipt.status}</Badge></p>
-                  {activeReceipt.status === 'Rejected' && <p><span className="font-semibold">Reason:</span> {activeReceipt.reason}</p>}
+                  <div><span className="font-semibold">Student:</span> {activeReceipt.studentName}</div>
+                  <div><span className="font-semibold">Date:</span> {activeReceipt.date}</div>
+                  <div className="flex items-center gap-1"><span className="font-semibold">Status:</span> <Badge variant="outline" className={statusColors[activeReceipt.status]}>{activeReceipt.status}</Badge></div>
+                  {activeReceipt.status === 'Rejected' && <div><span className="font-semibold">Reason:</span> {activeReceipt.reason}</div>}
                </div>
             </div>
           )}
