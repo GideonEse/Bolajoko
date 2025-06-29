@@ -1,32 +1,86 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { Toaster } from "@/components/ui/toaster";
-import { cn } from '@/lib/utils';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'ReceiptVerse',
-  description: 'Manage and verify your receipts with ease.',
-};
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { register } from '@/lib/actions';
+import { Logo } from '@/components/logo';
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RegisterPage() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={cn("font-body antialiased min-h-screen")}>
-        {children}
-        <Toaster />
-      </body>
-    </html>
+    <div className="flex items-center justify-center min-h-screen bg-background p-4">
+      <Card className="mx-auto max-w-sm w-full shadow-2xl">
+        <CardHeader className="text-center">
+           <div className="mb-4">
+            <Logo />
+          </div>
+          <CardTitle className="text-2xl font-headline">Sign Up</CardTitle>
+          <CardDescription>
+            Create an account to start managing receipts
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={register} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" placeholder="Your Name" required />
+            </div>
+             <div className="grid gap-2">
+              <Label htmlFor="matricNumber">Matric Number</Label>
+              <Input id="matricNumber" name="matricNumber" placeholder="U21/CS/001" required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="role">Role</Label>
+              <Select name="role" required defaultValue="student">
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="staff">Staff</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" name="password" required />
+            </div>
+            <Button type="submit" className="w-full">
+              Create an account
+            </Button>
+          </form>
+           {error && (
+            <div className="mt-4 text-center text-sm text-destructive">
+              {error}
+            </div>
+          )}
+          <div className="mt-4 text-center text-sm">
+            Already have an account?{' '}
+            <Link href="/" className="underline">
+              Login
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

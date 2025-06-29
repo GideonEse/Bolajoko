@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   SidebarProvider,
@@ -32,7 +33,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
-import type { Role } from '@/lib/types';
+import type { Role, User } from '@/lib/types';
+import { findUserById } from '@/lib/data';
 
 const navLinks = {
   student: [
@@ -59,7 +61,19 @@ export default function DashboardLayout({
 }) {
   const searchParams = useSearchParams();
   const role = (searchParams.get('role') as Role) || 'student';
+  const userId = searchParams.get('userId');
+  const [user, setUser] = useState<User | null>(null);
   const links = navLinks[role] || navLinks.student;
+
+  useEffect(() => {
+    if (userId) {
+      findUserById(userId).then(fetchedUser => {
+        if(fetchedUser) {
+          setUser(fetchedUser);
+        }
+      });
+    }
+  }, [userId]);
 
   return (
     <SidebarProvider>
@@ -71,7 +85,7 @@ export default function DashboardLayout({
           <SidebarMenu>
             {links.map((link) => (
               <SidebarMenuItem key={link.label}>
-                <SidebarMenuButton href={link.href} tooltip={link.label}>
+                <SidebarMenuButton href={`${link.href}&userId=${userId}`} tooltip={link.label}>
                   <link.icon />
                   <span>{link.label}</span>
                 </SidebarMenuButton>
@@ -84,20 +98,20 @@ export default function DashboardLayout({
         <header className="flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 lg:h-[60px] lg:px-6 sticky top-0 z-40">
           <SidebarTrigger className="md:hidden" />
           <div className="w-full flex-1">
-            <h1 className="text-lg font-headline font-semibold">{roleNames[role]} Dashboard</h1>
+            <h1 className="text-lg font-headline font-semibold">{user?.name ?? `${roleNames[role]} Dashboard`}</h1>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src={`https://i.pravatar.cc/150?u=${role}`} />
-                  <AvatarFallback>{role.charAt(0).toUpperCase()}</AvatarFallback>
+                  <AvatarImage src={`https://i.pravatar.cc/150?u=${userId}`} />
+                  <AvatarFallback>{user ? user.name.charAt(0).toUpperCase() : role.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{user?.name ?? 'My Account'}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <Link href="#">
                 <DropdownMenuItem>

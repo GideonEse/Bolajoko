@@ -10,7 +10,7 @@ export function Logo({ className }: { className?: string }) {
       )}
     >
       <ReceiptText className="h-6 w-6" />
-      <span>ReceiptVerse</span>
+      <span>DRMS</span>
     </div>
   );
 }

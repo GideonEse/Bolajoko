@@ -145,7 +145,7 @@ export async function handleReceiptVerification(
     console.error('Verification failed:', error);
     return {
       status: 'error',
-      message: 'An unexpected error occurred during verification.',
+      message: 'Verification failed. This might be due to a connection issue or a missing API key. Please ensure your Genkit server is running and the GOOGLE_API_KEY is correctly set in your .env file.',
       errors: { _server: ['Failed to connect to the verification service.'] },
     };
   }
