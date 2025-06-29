@@ -34,7 +34,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import type { Role, User } from '@/lib/types';
-import { findUserById } from '@/lib/data';
+import { getUserData } from '@/lib/actions';
 
 const navLinks = {
   student: [
@@ -67,7 +67,7 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (userId) {
-      findUserById(userId).then(fetchedUser => {
+      getUserData(userId).then(fetchedUser => {
         if(fetchedUser) {
           setUser(fetchedUser);
         }

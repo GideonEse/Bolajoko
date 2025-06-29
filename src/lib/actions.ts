@@ -12,7 +12,7 @@ import {
     findUserByMatricNumber,
     findUserById
 } from './data';
-import type { Role } from './types';
+import type { Role, User } from './types';
 
 export async function login(formData: FormData) {
   const role = formData.get('role') as string;
@@ -194,4 +194,9 @@ export async function getApprovedListAsCsv(): Promise<string> {
   ].join('\n');
   
   return csvContent;
+}
+
+export async function getUserData(userId: string): Promise<User | null> {
+  const user = await findUserById(userId);
+  return user ?? null;
 }
