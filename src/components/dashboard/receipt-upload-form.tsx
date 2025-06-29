@@ -1,15 +1,14 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { handleReceiptVerification, type VerificationState } from '@/lib/actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { UploadCloud, Loader2, CheckCircle, XCircle } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { UploadCloud, Loader2 } from 'lucide-react';
+import { useActionState, useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 function SubmitButton() {
@@ -35,7 +34,7 @@ const initialState: VerificationState = {
 };
 
 export function ReceiptUploadForm() {
-  const [state, formAction] = useFormState(handleReceiptVerification, initialState);
+  const [state, formAction] = useActionState(handleReceiptVerification, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
 
