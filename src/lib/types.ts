@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: Role;
   matricNumber: string;
+  password?: string;
 }
 
 export type ReceiptStatus = 'Pending' | 'Approved' | 'Rejected';

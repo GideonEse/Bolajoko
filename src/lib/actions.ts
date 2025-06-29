@@ -17,17 +17,13 @@ import type { Role } from './types';
 export async function login(formData: FormData) {
   const role = formData.get('role') as string;
   const matricNumber = formData.get('matricNumber') as string;
+  const password = formData.get('password') as string;
   
-  // Find user by matric number
   const user = await findUserByMatricNumber(matricNumber);
 
-  // In a real app, you would also verify the password here.
-  // For this prototype, we'll just check if the user exists and the role matches.
-  if (user && user.role === role) {
+  if (user && user.role === role && user.password === password) {
     redirect(`/dashboard?role=${user.role}&userId=${user.id}`);
   } else {
-    // In a real app, you'd show an error message.
-    // For now, we just redirect back to the login page.
     redirect('/');
   }
 }
@@ -55,9 +51,9 @@ export async function register(formData: FormData) {
         email,
         matricNumber,
         role,
+        password,
     });
     
-    // Automatically log in the user after registration
     redirect(`/dashboard?role=${newUser.role}&userId=${newUser.id}`);
 }
 

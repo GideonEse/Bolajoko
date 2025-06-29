@@ -7,7 +7,8 @@ export let mockUsers: User[] = [
     name: 'Admin User',
     email: 'admin@receiptverse.com',
     role: 'admin',
-    matricNumber: 'admin'
+    matricNumber: 'admin',
+    password: 'admin',
   }
 ];
 
