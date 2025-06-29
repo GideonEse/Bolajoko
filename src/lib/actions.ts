@@ -9,17 +9,17 @@ import {
     updateReceipt, 
     getReceipts,
     addUser,
-    findUserByEmail,
+    findUserByMatricNumber,
     findUserById
 } from './data';
 import type { Role } from './types';
 
 export async function login(formData: FormData) {
   const role = formData.get('role') as string;
-  const email = formData.get('email') as string;
+  const matricNumber = formData.get('matricNumber') as string;
   
-  // Find user by email
-  const user = await findUserByEmail(email);
+  // Find user by matric number
+  const user = await findUserByMatricNumber(matricNumber);
 
   // In a real app, you would also verify the password here.
   // For this prototype, we'll just check if the user exists and the role matches.
@@ -44,9 +44,9 @@ export async function register(formData: FormData) {
         return;
     }
 
-    const existingUser = await findUserByEmail(email);
+    const existingUser = await findUserByMatricNumber(matricNumber);
     if (existingUser) {
-        redirect('/register?error=User already exists');
+        redirect('/register?error=User with this Matric Number already exists');
         return;
     }
 

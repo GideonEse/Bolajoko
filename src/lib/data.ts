@@ -1,7 +1,15 @@
 import type { User, Receipt, ReceiptStatus } from './types';
 
 // This is now mutable to simulate a database
-export let mockUsers: User[] = [];
+export let mockUsers: User[] = [
+  {
+    id: 'U0',
+    name: 'Admin User',
+    email: 'admin@receiptverse.com',
+    role: 'admin',
+    matricNumber: 'admin'
+  }
+];
 
 // This is now mutable to simulate a database
 export let mockReceipts: Receipt[] = [];
@@ -11,6 +19,10 @@ export let mockReceipts: Receipt[] = [];
 
 export async function findUserByEmail(email: string): Promise<User | undefined> {
     return Promise.resolve(mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase()));
+}
+
+export async function findUserByMatricNumber(matricNumber: string): Promise<User | undefined> {
+    return Promise.resolve(mockUsers.find(u => u.matricNumber.toLowerCase() === matricNumber.toLowerCase()));
 }
 
 export async function findUserById(id: string): Promise<User | undefined> {

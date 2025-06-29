@@ -29,18 +29,17 @@ export default function LoginPage() {
           </div>
           <CardTitle className="text-2xl font-headline">Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account.
+            Select your role and enter your credentials to login.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={login} className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="matricNumber">Matric Number</Label>
               <Input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="m@example.com"
+                id="matricNumber"
+                name="matricNumber"
+                placeholder="e.g., U21/CS/001 or admin"
                 required
               />
             </div>
