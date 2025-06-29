@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,6 +23,9 @@ import { register } from '@/lib/actions';
 import { Logo } from '@/components/logo';
 
 export default function RegisterPage() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="mx-auto max-w-sm w-full shadow-2xl">
@@ -72,6 +78,11 @@ export default function RegisterPage() {
               Create an account
             </Button>
           </form>
+           {error && (
+            <div className="mt-4 text-center text-sm text-destructive">
+              {error}
+            </div>
+          )}
           <div className="mt-4 text-center text-sm">
             Already have an account?{' '}
             <Link href="/" className="underline">

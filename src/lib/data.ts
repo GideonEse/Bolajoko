@@ -1,6 +1,7 @@
 import type { User, Receipt, ReceiptStatus } from './types';
 
-// This is now mutable to simulate a database
+// This is an in-memory "database". In a real application, this would be a persistent database.
+// NOTE: In a development environment, this data will reset on server restarts or hot reloads.
 export let mockUsers: User[] = [
   {
     id: 'U0',
@@ -9,22 +10,6 @@ export let mockUsers: User[] = [
     role: 'admin',
     matricNumber: 'admin',
     password: 'admin',
-  },
-  {
-    id: 'U1',
-    name: 'Alice Student',
-    email: 'alice@example.com',
-    role: 'student',
-    matricNumber: 'U21CS001',
-    password: 'password',
-  },
-  {
-    id: 'U2',
-    name: 'Bob Staff',
-    email: 'bob@example.com',
-    role: 'staff',
-    matricNumber: 'S-ENG055',
-    password: 'password',
   }
 ];
 
