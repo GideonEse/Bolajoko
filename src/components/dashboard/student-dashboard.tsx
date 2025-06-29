@@ -1,4 +1,3 @@
-import { ReceiptUploadForm } from './receipt-upload-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -15,53 +14,45 @@ export default function StudentDashboard() {
   const studentReceipts = mockReceipts.filter(r => r.studentId === '1'); // Mock: show receipts for Alice
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <div className="lg:col-span-1">
-        <ReceiptUploadForm />
-      </div>
-
-      <div className="lg:col-span-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline">My Submitted Receipts</CardTitle>
-            <CardDescription>
-              Track the status of your uploaded receipts here.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Receipt ID</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Reason</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {studentReceipts.length > 0 ? studentReceipts.map((receipt) => (
-                  <TableRow key={receipt.id}>
-                    <TableCell className="font-medium">{receipt.receiptId}</TableCell>
-                    <TableCell>{receipt.date}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={statusColors[receipt.status]}>
-                        {receipt.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{receipt.reason || 'N/A'}</TableCell>
-                  </TableRow>
-                )) : (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center">
-                      You have not submitted any receipts yet.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-headline">My Submitted Receipts</CardTitle>
+        <CardDescription>
+          Track the status of your uploaded receipts here.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Receipt ID</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Reason</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {studentReceipts.length > 0 ? studentReceipts.map((receipt) => (
+              <TableRow key={receipt.id}>
+                <TableCell className="font-medium">{receipt.receiptId}</TableCell>
+                <TableCell>{receipt.date}</TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={statusColors[receipt.status]}>
+                    {receipt.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>{receipt.reason || 'N/A'}</TableCell>
+              </TableRow>
+            )) : (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center">
+                  You have not submitted any receipts yet.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 }

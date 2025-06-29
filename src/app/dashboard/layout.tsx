@@ -37,8 +37,8 @@ import type { Role } from '@/lib/types';
 
 const navLinks = {
   student: [
-    { href: '/dashboard?role=student', label: 'Upload Receipt', icon: UploadCloud },
-    { href: '#', label: 'My Receipts', icon: FileClock },
+    { href: '/dashboard/upload?role=student', label: 'Upload Receipt', icon: UploadCloud },
+    { href: '/dashboard?role=student', label: 'My Receipts', icon: FileClock },
   ],
   staff: [
     { href: '/dashboard?role=staff', label: 'Approved List', icon: FileDown },
