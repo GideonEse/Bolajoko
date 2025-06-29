@@ -44,16 +44,6 @@ export default function RegisterPage() {
               <Label htmlFor="name">Name</Label>
               <Input id="name" name="name" placeholder="Your Name" required />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
              <div className="grid gap-2">
               <Label htmlFor="matricNumber">Matric Number</Label>
               <Input id="matricNumber" name="matricNumber" placeholder="U21/CS/001" required />

@@ -3,7 +3,6 @@ export type Role = 'student' | 'staff' | 'admin';
 export interface User {
   id: string;
   name: string;
-  email: string;
   role: Role;
   matricNumber: string;
   password?: string;

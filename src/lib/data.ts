@@ -12,7 +12,6 @@ if (!global.mockUsers) {
     {
       id: 'U0',
       name: 'Admin User',
-      email: 'admin@receiptverse.com',
       role: 'admin',
       matricNumber: 'admin',
       password: 'admin',
@@ -29,10 +28,6 @@ export let mockReceipts: Receipt[] = global.mockReceipts;
 
 
 // --- Data Access Functions ---
-
-export async function findUserByEmail(email: string): Promise<User | undefined> {
-    return Promise.resolve(mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase()));
-}
 
 export async function findUserByMatricNumber(matricNumber: string): Promise<User | undefined> {
     return Promise.resolve(mockUsers.find(u => u.matricNumber.toLowerCase() === matricNumber.toLowerCase()));

@@ -30,12 +30,11 @@ export async function login(formData: FormData) {
 
 export async function register(formData: FormData) {
     const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
     const matricNumber = formData.get('matricNumber') as string;
     const role = formData.get('role') as Role;
     const password = formData.get('password') as string;
 
-    if(!name || !email || !matricNumber || !role || !password) {
+    if(!name || !matricNumber || !role || !password) {
         redirect('/register?error=Please fill all fields');
         return;
     }
@@ -48,7 +47,6 @@ export async function register(formData: FormData) {
 
     const newUser = await addUser({
         name,
-        email,
         matricNumber,
         role,
         password,
