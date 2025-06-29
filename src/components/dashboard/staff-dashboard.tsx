@@ -1,11 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { mockReceipts } from '@/lib/data';
 import { FileDown } from 'lucide-react';
+import type { Receipt } from '@/lib/types';
 
-export default function StaffDashboard() {
-  const approvedReceipts = mockReceipts.filter(r => r.status === 'Approved');
+interface StaffDashboardProps {
+  receipts: Receipt[];
+}
+
+export default function StaffDashboard({ receipts }: StaffDashboardProps) {
 
   return (
     <Card>
@@ -31,7 +34,7 @@ export default function StaffDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {approvedReceipts.length > 0 ? approvedReceipts.map((receipt) => (
+            {receipts.length > 0 ? receipts.map((receipt) => (
               <TableRow key={receipt.id}>
                 <TableCell className="font-medium">{receipt.studentName}</TableCell>
                 <TableCell>{receipt.receiptId}</TableCell>

@@ -29,7 +29,8 @@ export default function LoginPage() {
           </div>
           <CardTitle className="text-2xl font-headline">Login</CardTitle>
           <CardDescription>
-            Enter your credentials to access your dashboard
+            Enter your credentials to access your dashboard. <br/>
+            Use <code className="bg-muted px-1 rounded-sm">alice@example.com</code> or <code className="bg-muted px-1 rounded-sm">bob@example.com</code> for the student role.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -46,7 +47,7 @@ export default function LoginPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" name="password" required />
+              <Input id="password" type="password" name="password" required defaultValue="password123" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>

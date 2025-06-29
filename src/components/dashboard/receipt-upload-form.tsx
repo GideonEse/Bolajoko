@@ -32,25 +32,24 @@ const initialState: VerificationState = {
   message: '',
 };
 
-export function ReceiptUploadForm() {
+export function ReceiptUploadForm({ studentId }: { studentId: string }) {
   const [state, formAction] = useActionState(handleReceiptVerification, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
 
   useEffect(() => {
+    if (state.status === 'idle') return;
+
+    const variant = state.status === 'error' || state.data?.isValid === false ? 'destructive' : 'default';
+    
+    toast({
+      title: state.status === 'success' ? 'Verification Complete' : 'Verification Failed',
+      description: state.message,
+      variant: variant,
+    });
+    
     if (state.status === 'success') {
-      toast({
-        title: 'Verification Complete',
-        description: state.message,
-        variant: state.data?.isValid ? 'default' : 'destructive',
-      });
       formRef.current?.reset();
-    } else if (state.status === 'error' && state.errors?._server) {
-       toast({
-        title: 'Verification Failed',
-        description: state.errors._server[0],
-        variant: 'destructive',
-      });
     }
   }, [state, toast]);
 
@@ -64,6 +63,7 @@ export function ReceiptUploadForm() {
       </CardHeader>
       <CardContent>
         <form ref={formRef} action={formAction} className="space-y-4">
+          <input type="hidden" name="studentId" value={studentId} />
           <div className="space-y-2">
             <Label htmlFor="receiptId">Receipt ID</Label>
             <Input id="receiptId" name="receiptId" placeholder="e.g., INV-12345" required />

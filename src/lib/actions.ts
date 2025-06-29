@@ -4,10 +4,19 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { verifyReceipt, type VerifyReceiptOutput } from '@/ai/flows/verify-receipt';
 import { revalidatePath } from 'next/cache';
+import { addReceipt, updateReceipt, mockUsers } from './data';
 
 export async function login(formData: FormData) {
   const role = formData.get('role') as string;
-  redirect(`/dashboard?role=${role || 'student'}`);
+  const email = formData.get('email') as string;
+  
+  // Find user by email and role to simulate authentication
+  const user = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.role === role);
+
+  // Default to student '1' (Alice) if not found, for demonstration purposes
+  const userId = user ? user.id : '1';
+  
+  redirect(`/dashboard?role=${role || 'student'}&userId=${userId}`);
 }
 
 export async function register(formData: FormData) {
@@ -19,12 +28,14 @@ export async function register(formData: FormData) {
         matricNumber: formData.get('matricNumber'),
         role: role,
     });
+    // For now, just log them in with their chosen role
     redirect(`/dashboard?role=${role || 'student'}`);
 }
 
 const receiptSchema = z.object({
   receiptId: z.string().min(1, 'Receipt ID is required.'),
   date: z.string().min(1, 'Date is required.'),
+  studentId: z.string().min(1, 'Student ID is missing.'),
   receiptImage: z
     .instanceof(File)
     .refine((file) => file.size > 0, 'Receipt image is required.')
@@ -40,6 +51,7 @@ export type VerificationState = {
     receiptId?: string[];
     date?: string[];
     receiptImage?: string[];
+    studentId?: string[];
     _server?: string[];
   };
 };
@@ -52,6 +64,7 @@ export async function handleReceiptVerification(
     receiptId: formData.get('receiptId'),
     date: formData.get('date'),
     receiptImage: formData.get('receiptImage'),
+    studentId: formData.get('studentId'),
   });
 
   if (!validatedFields.success) {
@@ -59,6 +72,15 @@ export async function handleReceiptVerification(
       status: 'error',
       message: 'Please check your input.',
       errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+  
+  const student = mockUsers.find(u => u.id === validatedFields.data.studentId);
+  if (!student) {
+     return {
+      status: 'error',
+      message: 'Invalid user.',
+      errors: { _server: ['Could not find student record.'] },
     };
   }
 
@@ -70,19 +92,32 @@ export async function handleReceiptVerification(
 
     const result = await verifyReceipt({
       receiptImage: dataURI,
-      ...otherFields,
+      receiptId: otherFields.receiptId,
+      date: otherFields.date,
     });
 
-    // Here you would typically save the receipt and its verification status to a database.
-    console.log('Verification Result:', result);
-    
-    revalidatePath('/dashboard');
+    if (result.isValid) {
+      await addReceipt({
+        studentId: student.id,
+        studentName: student.name,
+        receiptId: otherFields.receiptId,
+        date: otherFields.date,
+      }, receiptImage);
 
-    return {
-      status: 'success',
-      message: `Receipt ${result.isValid ? 'approved' : 'rejected'}. Reason: ${result.reason || 'N/A'}`,
-      data: result,
-    };
+      revalidatePath('/dashboard');
+
+      return {
+        status: 'success',
+        message: 'Receipt passed verification and has been submitted for approval.',
+        data: result,
+      };
+    } else {
+       return {
+        status: 'error',
+        message: `Receipt is invalid. Reason: ${result.reason || 'AI could not validate the receipt.'}`,
+        data: result,
+      };
+    }
   } catch (error) {
     console.error('Verification failed:', error);
     return {
@@ -90,5 +125,31 @@ export async function handleReceiptVerification(
       message: 'An unexpected error occurred during verification.',
       errors: { _server: ['Failed to connect to the verification service.'] },
     };
+  }
+}
+
+
+export async function approveReceipt(id: string) {
+  try {
+    await updateReceipt(id, 'Approved');
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to approve receipt:', error);
+    return { success: false, message: 'Failed to approve receipt.' };
+  }
+}
+
+export async function rejectReceipt(id: string, reason: string) {
+  if (!reason) {
+    return { success: false, message: 'A reason is required for rejection.' };
+  }
+  try {
+    await updateReceipt(id, 'Rejected', reason);
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to reject receipt:', error);
+    return { success: false, message: 'Failed to reject receipt.' };
   }
 }

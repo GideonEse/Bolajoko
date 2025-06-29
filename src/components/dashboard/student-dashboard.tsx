@@ -1,8 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { mockReceipts } from '@/lib/data';
-import type { ReceiptStatus } from '@/lib/types';
+import type { Receipt, ReceiptStatus } from '@/lib/types';
 import { ReceiptUploadForm } from './receipt-upload-form';
 
 const statusColors: Record<ReceiptStatus, string> = {
@@ -11,13 +10,17 @@ const statusColors: Record<ReceiptStatus, string> = {
   Rejected: 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-300 dark:border-red-700/40',
 };
 
-export default function StudentDashboard() {
-  const studentReceipts = mockReceipts.filter(r => r.studentId === '1'); // Mock: show receipts for Alice
+interface StudentDashboardProps {
+  receipts: Receipt[];
+  studentId: string;
+}
+
+export default function StudentDashboard({ receipts, studentId }: StudentDashboardProps) {
 
   return (
     <div className="space-y-8">
       <div className="max-w-lg mx-auto">
-        <ReceiptUploadForm />
+        <ReceiptUploadForm studentId={studentId} />
       </div>
 
       <Card>
@@ -38,7 +41,7 @@ export default function StudentDashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {studentReceipts.length > 0 ? studentReceipts.map((receipt) => (
+              {receipts.length > 0 ? receipts.map((receipt) => (
                 <TableRow key={receipt.id}>
                   <TableCell className="font-medium">{receipt.receiptId}</TableCell>
                   <TableCell>{receipt.date}</TableCell>
