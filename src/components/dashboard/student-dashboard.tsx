@@ -47,7 +47,6 @@ export default function StudentDashboard({ receipts, studentId }: StudentDashboa
                   <TableHead>Receipt ID</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Reason</TableHead>
                   <TableHead className="text-right">View Receipt</TableHead>
                 </TableRow>
               </TableHeader>
@@ -61,7 +60,6 @@ export default function StudentDashboard({ receipts, studentId }: StudentDashboa
                         {receipt.status}
                       </Badge>
                     </TableCell>
-                    <TableCell>{receipt.reason || 'N/A'}</TableCell>
                     <TableCell className="text-right">
                        <Button variant="outline" size="sm" onClick={() => { setActiveReceipt(receipt); setViewModalOpen(true); }}>
                         <Eye className="h-4 w-4" />
@@ -70,7 +68,7 @@ export default function StudentDashboard({ receipts, studentId }: StudentDashboa
                   </TableRow>
                 )) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center">
+                    <TableCell colSpan={4} className="text-center">
                       You have not submitted any receipts yet.
                     </TableCell>
                   </TableRow>
