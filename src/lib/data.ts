@@ -16,6 +16,20 @@ if (!global.mockUsers) {
       matricNumber: 'admin',
       password: 'admin',
     },
+    {
+      id: 'U1',
+      name: 'John Doe',
+      role: 'student',
+      matricNumber: 'U21CS001',
+      password: 'password',
+    },
+    {
+      id: 'U2',
+      name: 'Jane Smith',
+      role: 'staff',
+      matricNumber: 'S-ENG055',
+      password: 'password',
+    },
   ];
 }
 
