@@ -1,20 +1,31 @@
 import type { User, Receipt, ReceiptStatus } from './types';
 
 // This is an in-memory "database". In a real application, this would be a persistent database.
-// NOTE: In a development environment, this data will reset on server restarts or hot reloads.
-export let mockUsers: User[] = [
-  {
-    id: 'U0',
-    name: 'Admin User',
-    email: 'admin@receiptverse.com',
-    role: 'admin',
-    matricNumber: 'admin',
-    password: 'admin',
-  }
-];
+// We use the 'global' object to persist data across hot reloads in development.
+declare global {
+  var mockUsers: User[] | undefined;
+  var mockReceipts: Receipt[] | undefined;
+}
 
-// This is now mutable to simulate a database
-export let mockReceipts: Receipt[] = [];
+if (!global.mockUsers) {
+  global.mockUsers = [
+    {
+      id: 'U0',
+      name: 'Admin User',
+      email: 'admin@receiptverse.com',
+      role: 'admin',
+      matricNumber: 'admin',
+      password: 'admin',
+    },
+  ];
+}
+
+if (!global.mockReceipts) {
+    global.mockReceipts = [];
+}
+
+export let mockUsers: User[] = global.mockUsers;
+export let mockReceipts: Receipt[] = global.mockReceipts;
 
 
 // --- Data Access Functions ---
