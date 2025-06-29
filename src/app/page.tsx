@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,6 +23,14 @@ import { login } from '@/lib/actions';
 import { Logo } from '@/components/logo';
 
 export default function LoginPage() {
+  const [role, setRole] = useState('student');
+
+  const handleRoleChange = (value: string) => {
+    setRole(value);
+  };
+
+  const isAdmin = role === 'admin';
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="mx-auto max-w-sm w-full shadow-2xl">
@@ -35,11 +46,11 @@ export default function LoginPage() {
         <CardContent>
           <form action={login} className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="matricNumber">Matric Number</Label>
+              <Label htmlFor="matricNumber">{isAdmin ? 'Username' : 'Matric Number'}</Label>
               <Input
                 id="matricNumber"
                 name="matricNumber"
-                placeholder="e.g., U21/CS/001 or admin"
+                placeholder={isAdmin ? 'admin' : 'e.g., U21/CS/001'}
                 required
               />
             </div>
@@ -49,7 +60,7 @@ export default function LoginPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="role">Role</Label>
-              <Select name="role" defaultValue="student">
+              <Select name="role" value={role} onValueChange={handleRoleChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
