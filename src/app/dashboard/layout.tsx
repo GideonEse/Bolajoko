@@ -16,11 +16,10 @@ import {
 import { Logo } from '@/components/logo';
 import {
   LayoutDashboard,
-  UploadCloud,
-  FileClock,
   FileDown,
   LogOut,
-  User,
+  Settings,
+  LifeBuoy,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -101,14 +100,18 @@ export default function DashboardLayout({
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <LifeBuoy className="mr-2 h-4 w-4" />
+                <span>Support</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <Link href="/">
                 <DropdownMenuItem>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <span>Logout</span>
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuContent>
