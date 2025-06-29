@@ -2,7 +2,8 @@ import StudentDashboard from '@/components/dashboard/student-dashboard';
 import StaffDashboard from '@/components/dashboard/staff-dashboard';
 import AdminDashboard from '@/components/dashboard/admin-dashboard';
 import type { Role } from '@/lib/types';
-import { getReceipts, getReceiptsByStudentId } from '@/lib/data';
+import { getReceipts, getReceiptsByStudentId, findUserById } from '@/lib/data';
+import { redirect } from 'next/navigation';
 
 interface DashboardPageProps {
   searchParams: {
@@ -12,8 +13,20 @@ interface DashboardPageProps {
 }
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
-  const role = searchParams.role || 'student';
-  const userId = searchParams.userId || '1'; // Default to user 1 if not provided
+  const role = searchParams.role;
+  const userId = searchParams.userId;
+
+  if (!role || !userId) {
+    // If role or userId is missing, redirect to login
+    redirect('/');
+  }
+
+  // Validate user
+  const user = await findUserById(userId);
+  if (!user || user.role !== role) {
+    // If user not found or role doesn't match, redirect to login
+    redirect('/');
+  }
 
   // Fetch data on the server based on the role
   const allReceipts = await getReceipts();
