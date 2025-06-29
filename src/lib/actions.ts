@@ -84,6 +84,15 @@ export async function handleReceiptVerification(
   prevState: VerificationState,
   formData: FormData
 ): Promise<VerificationState> {
+  if (!process.env.GOOGLE_API_KEY) {
+    console.error('GOOGLE_API_KEY is not set in the environment.');
+    return {
+      status: 'error',
+      message: 'Configuration Error: The Google API Key is missing. Please create a .env file in the project root and add your GOOGLE_API_KEY. You can get a key from Google AI Studio.',
+      errors: { _server: ['Missing API Key.'] },
+    };
+  }
+  
   const validatedFields = receiptSchema.safeParse({
     receiptId: formData.get('receiptId'),
     date: formData.get('date'),
@@ -146,7 +155,7 @@ export async function handleReceiptVerification(
     console.error('Verification failed:', error);
     return {
       status: 'error',
-      message: 'Verification failed. This might be due to a connection issue or a missing API key. Please ensure your Genkit server is running and the GOOGLE_API_KEY is correctly set in your .env file.',
+      message: 'Verification failed. This is likely a connection issue. Please ensure your Genkit server is running with `npm run genkit:dev` in a separate terminal.',
       errors: { _server: ['Failed to connect to the verification service.'] },
     };
   }
