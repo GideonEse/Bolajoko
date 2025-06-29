@@ -1,4 +1,7 @@
+'use client';
+
 import type { ReactNode } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   SidebarProvider,
   Sidebar,
@@ -32,13 +35,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import type { Role } from '@/lib/types';
 
-interface DashboardLayoutProps {
-  children: ReactNode;
-  searchParams: {
-    role?: Role;
-  };
-}
-
 const navLinks = {
   student: [
     { href: '/dashboard?role=student', label: 'Upload Receipt', icon: UploadCloud },
@@ -60,9 +56,11 @@ const roleNames = {
 
 export default function DashboardLayout({
   children,
-  searchParams,
-}: DashboardLayoutProps) {
-  const role = searchParams.role || 'student';
+}: {
+  children: ReactNode;
+}) {
+  const searchParams = useSearchParams();
+  const role = (searchParams.get('role') as Role) || 'student';
   const links = navLinks[role] || navLinks.student;
 
   return (
