@@ -105,7 +105,6 @@ export default function DashboardLayout({
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src={`https://i.pravatar.cc/150?u=${userId}`} />
                   <AvatarFallback>{user ? user.name.charAt(0).toUpperCase() : role.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <span className="sr-only">Toggle user menu</span>
