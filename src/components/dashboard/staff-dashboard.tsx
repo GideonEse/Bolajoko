@@ -1,26 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { mockReceipts } from '@/lib/data';
-import type { ReceiptStatus } from '@/lib/types';
-import { FileDown, Eye } from 'lucide-react';
-import Image from 'next/image';
-
-const statusColors: Record<ReceiptStatus, string> = {
-  Approved: 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700/40',
-  Pending: 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-300 dark:border-yellow-700/40',
-  Rejected: 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-300 dark:border-red-700/40',
-};
+import { FileDown } from 'lucide-react';
 
 export default function StaffDashboard() {
+  const approvedReceipts = mockReceipts.filter(r => r.status === 'Approved');
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="font-headline">Receipt Verification</CardTitle>
+          <CardTitle className="font-headline">Approved Receipts</CardTitle>
           <CardDescription>
-            Review and verify receipts submitted by students.
+            List of students who have successfully uploaded their receipts.
           </CardDescription>
         </div>
         <Button>
@@ -32,33 +25,25 @@ export default function StaffDashboard() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Receipt ID</TableHead>
               <TableHead>Student Name</TableHead>
+              <TableHead>Receipt ID</TableHead>
               <TableHead>Date Submitted</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockReceipts.map((receipt) => (
+            {approvedReceipts.length > 0 ? approvedReceipts.map((receipt) => (
               <TableRow key={receipt.id}>
-                <TableCell className="font-medium">{receipt.receiptId}</TableCell>
-                <TableCell>{receipt.studentName}</TableCell>
+                <TableCell className="font-medium">{receipt.studentName}</TableCell>
+                <TableCell>{receipt.receiptId}</TableCell>
                 <TableCell>{receipt.date}</TableCell>
-                <TableCell>
-                  <Badge variant="outline" className={statusColors[receipt.status]}>
-                    {receipt.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      <Eye className="mr-2 h-4 w-4" /> View
-                    </Button>
-                  </div>
+              </TableRow>
+            )) : (
+                <TableRow>
+                <TableCell colSpan={3} className="text-center">
+                  No approved receipts yet.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </CardContent>

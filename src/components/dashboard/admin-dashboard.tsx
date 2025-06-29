@@ -1,65 +1,75 @@
+'use client'; // For onClick handlers
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { mockUsers } from '@/lib/data';
-import type { Role } from '@/lib/types';
-import { Button } from '../ui/button';
-import { MoreHorizontal } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { mockReceipts as initialReceipts } from '@/lib/data';
+import type { Receipt, ReceiptStatus } from '@/lib/types';
+import { Check, X, Eye } from 'lucide-react';
+import { useState } from 'react';
 
-const roleColors: Record<Role, string> = {
-  admin: 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-700/40',
-  staff: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-700/40',
-  student: 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-700/40',
+const statusColors: Record<ReceiptStatus, string> = {
+  Approved: 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700/40',
+  Pending: 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-300 dark:border-yellow-700/40',
+  Rejected: 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-300 dark:border-red-700/40',
 };
 
 export default function AdminDashboard() {
+  const [receipts, setReceipts] = useState<Receipt[]>(initialReceipts);
+
+  // In a real app, this would be a server action to update status
+  const handleStatusChange = (id: string, status: ReceiptStatus) => {
+    setReceipts(receipts.map(r => r.id === id ? { ...r, status } : r));
+    console.log(`Receipt ${id} status changed to ${status}`);
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">User Management</CardTitle>
+        <CardTitle className="font-headline">Receipt Verification</CardTitle>
         <CardDescription>
-          View and manage all users in the system.
+          Review and verify receipts submitted by students.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>University ID</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>
-                <span className="sr-only">Actions</span>
-              </TableHead>
+              <TableHead>Receipt ID</TableHead>
+              <TableHead>Student Name</TableHead>
+              <TableHead>Date Submitted</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockUsers.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.universityId}</TableCell>
+            {receipts.map((receipt) => (
+              <TableRow key={receipt.id}>
+                <TableCell className="font-medium">{receipt.receiptId}</TableCell>
+                <TableCell>{receipt.studentName}</TableCell>
+                <TableCell>{receipt.date}</TableCell>
                 <TableCell>
-                  <Badge variant="outline" className={roleColors[user.role]}>
-                    {user.role}
+                  <Badge variant="outline" className={statusColors[receipt.status]}>
+                    {receipt.status}
                   </Badge>
                 </TableCell>
                 <TableCell>
-                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button aria-haspopup="true" size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
+                  <div className="flex gap-2">
+                      <Button variant="outline" size="sm">
+                        <Eye className="mr-2 h-4 w-4" /> View
                       </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Delete</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                      {receipt.status === 'Pending' && (
+                        <>
+                          <Button variant="outline" size="sm" onClick={() => handleStatusChange(receipt.id, 'Approved')} className="border-green-500 text-green-500 hover:bg-green-50 hover:text-green-600">
+                            <Check className="mr-2 h-4 w-4" /> Approve
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleStatusChange(receipt.id, 'Rejected')} className="border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600">
+                            <X className="mr-2 h-4 w-4" /> Reject
+                          </Button>
+                        </>
+                      )}
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

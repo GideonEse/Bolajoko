@@ -9,16 +9,12 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarGroup,
-  SidebarGroupLabel,
 } from '@/components/ui/sidebar';
 import { Logo } from '@/components/logo';
 import {
   LayoutDashboard,
   UploadCloud,
   FileClock,
-  UserCog,
-  Users,
   FileDown,
   LogOut,
   User,
@@ -49,12 +45,10 @@ const navLinks = {
     { href: '#', label: 'My Receipts', icon: FileClock },
   ],
   staff: [
-    { href: '/dashboard?role=staff', label: 'Verify Receipts', icon: LayoutDashboard },
-    { href: '#', label: 'Approved List', icon: FileDown },
+    { href: '/dashboard?role=staff', label: 'Approved List', icon: FileDown },
   ],
   admin: [
-    { href: '/dashboard?role=admin', label: 'User Management', icon: Users },
-    { href: '#', label: 'System Analytics', icon: UserCog },
+    { href: '/dashboard?role=admin', label: 'Verify Receipts', icon: LayoutDashboard },
   ],
 };
 
