@@ -48,7 +48,7 @@ export default function StudentDashboard({ receipts, studentId }: StudentDashboa
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Reason</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-right">View Receipt</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
